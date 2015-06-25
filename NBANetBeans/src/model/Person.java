@@ -19,6 +19,15 @@ public class Person implements Serializable{
     private String surname;
     private Calendar bDate;
     private String country;
+    private Integer type;
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
 
     public Person() {
     }
