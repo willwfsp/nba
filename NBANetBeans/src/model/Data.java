@@ -13,5 +13,5 @@ import java.util.List;
  * @author will
  */
 public class Data {
-    public static List<Person> listPerson = new ArrayList<>();
+    public static List<Game> listGame = new ArrayList<>();
 }
