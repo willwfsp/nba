@@ -10,10 +10,10 @@ import java.util.Calendar;
 import java.util.Objects;
 
 /**
- * Esta classe receberá os dados da view GameView
+ *
  * @author will
  */
-public class Game implements Serializable{
+public class Game implements Serializable {
     private Integer numGame;
     private Calendar date;
     private Calendar hour;
@@ -84,6 +84,6 @@ public class Game implements Serializable{
         }
         return true;
     }
-
+    
     
 }
