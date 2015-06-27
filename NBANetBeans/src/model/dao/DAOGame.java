@@ -5,10 +5,17 @@
  */
 package model.dao;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import model.Data;
 import model.Game;
-import model.Person;
+import model.OracleJDBC;
 
 /**
  *
@@ -16,7 +23,27 @@ import model.Person;
  */
 public class DAOGame {
     public List<Game> getList (){
-        return Data.listGame;
+        
+        
+        String sql = "select * from game";
+        List<Game> list = new ArrayList<>();
+            
+        try {  
+            PreparedStatement pst = OracleJDBC.getPreparedStatement(sql);
+            ResultSet rs = pst.executeQuery();
+            while(rs.next()){
+                Game game = new Game();
+                game.setNumGame(rs.getInt("numgame"));
+                game.setArena(rs.getInt("idarena"));
+                game.setSeason(rs.getInt("idseason"));
+                list.add(game);
+            }
+            
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao listar Games.\nDetalhes: ");
+        }
+        
+        return list;
     }
     
     public boolean insert (Game obj){
