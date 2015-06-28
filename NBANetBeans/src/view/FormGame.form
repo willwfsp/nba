@@ -105,23 +105,18 @@
               <BindingProperties>
                 <BindingProperty name="elements" source="gameList" target="jTable1" targetPath="elements" updateStrategy="0" immediately="true">
                   <Subbinding sourcePath="${season}">
-                    <BindingParameter name="NAME" value="Season"/>
                     <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="Integer.class"/>
                   </Subbinding>
                   <Subbinding sourcePath="${numGame}">
-                    <BindingParameter name="NAME" value="N&#xfa;mero"/>
                     <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="Integer.class"/>
                   </Subbinding>
                   <Subbinding sourcePath="${arena}">
-                    <BindingParameter name="NAME" value="Arena"/>
-                    <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="Integer.class"/>
+                    <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="model.Arena.class"/>
                   </Subbinding>
                   <Subbinding sourcePath="${formattedDate}">
-                    <BindingParameter name="NAME" value="Data"/>
                     <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="String.class"/>
                   </Subbinding>
                   <Subbinding sourcePath="${formattedHour}">
-                    <BindingParameter name="NAME" value="Hora"/>
                     <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="String.class"/>
                   </Subbinding>
                 </BindingProperty>

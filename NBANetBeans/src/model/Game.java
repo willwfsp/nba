@@ -9,6 +9,7 @@ import java.beans.Transient;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -17,9 +18,10 @@ import java.util.Objects;
  */
 public class Game implements Serializable {
     private Integer numGame;
-    private Calendar date;
+    private Date date;
     private Calendar hour;
-    private Integer arena;
+    //private Integer arena;
+    private Arena arena;
     private Integer Season;
 
     public Game() {
@@ -33,11 +35,11 @@ public class Game implements Serializable {
         this.numGame = numGame;
     }
 
-    public Calendar getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(Calendar date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
@@ -49,13 +51,15 @@ public class Game implements Serializable {
         this.hour = hour;
     }
 
-    public Integer getArena() {
+    public Arena getArena() {
         return arena;
     }
 
-    public void setArena(Integer arena) {
+    public void setArena(Arena arena) {
         this.arena = arena;
     }
+
+    
 
     public Integer getSeason() {
         return Season;
