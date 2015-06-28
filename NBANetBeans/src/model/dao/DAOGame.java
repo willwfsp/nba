@@ -9,6 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -36,6 +37,14 @@ public class DAOGame {
                 game.setNumGame(rs.getInt("numgame"));
                 game.setArena(rs.getInt("idarena"));
                 game.setSeason(rs.getInt("idseason"));
+                java.sql.Date dt = rs.getDate("dateg");
+                Calendar c = Calendar.getInstance();
+                c.setTime(dt);
+                game.setDate(c);
+                
+                java.sql.Time t = rs.getTime("hourg");
+                c.setTime(t);
+                game.setHour(c);
                 list.add(game);
             }
             

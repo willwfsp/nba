@@ -5,7 +5,9 @@
  */
 package model;
 
+import java.beans.Transient;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Objects;
 
@@ -85,5 +87,15 @@ public class Game implements Serializable {
         return true;
     }
     
+    @Transient
+    public String getFormattedDate(){
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        return sdf.format(date.getTime());
+    }
     
+    @Transient
+    public String getFormattedHour(){
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+        return sdf.format(hour.getTime());
+    }
 }
