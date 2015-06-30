@@ -11,10 +11,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import model.Data;
+import model.Arena;
 import model.Game;
 import model.OracleJDBC;
 
@@ -26,17 +24,29 @@ public class DAOGame {
     public List<Game> getList (){
         
         
-        String sql = "select * from game";
+        String sql =    "select distinct g.numgame, g.dateg, g.hourg, g.idArena, g.idSeason, s.name, a.address, a.idFranchise, a.idSponsor " +
+                        "from game g, arena a, sponsor s, boxscore b " +
+                        "where a.idSponsor = s.idSponsor AND " +
+                        "a.idArena = g.idArena AND b.numGame = g.numGame " +
+                        "order by g.numGame";
         List<Game> list = new ArrayList<>();
             
         try {  
             PreparedStatement pst = OracleJDBC.getPreparedStatement(sql);
             ResultSet rs = pst.executeQuery();
             while(rs.next()){
-                DAOArena dao = new DAOArena();
+
                 Game game = new Game();
                 game.setNumGame(rs.getInt("numgame"));
-                game.setArena(dao.getArenaById(rs.getInt("idArena")));
+                Arena arena = new Arena();
+                
+                arena.setAddress(rs.getString("address"));
+                arena.setIdFranchise(rs.getInt("idFranchise"));
+                arena.setIdSponsor(rs.getInt("idSponsor"));
+                arena.setIdArena(rs.getInt("idArena"));
+                arena.setName(rs.getString("name"));
+                
+                game.setArena(arena);
                 game.setSeason(rs.getInt("idseason"));
                 game.setDate(rs.getDate("dateg"));
                 
@@ -50,29 +60,10 @@ public class DAOGame {
             }
             
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao listar Games.\nDetalhes: ");
+            JOptionPane.showMessageDialog(null, "Erro ao listar Games.\nDetalhes: "+ ex.getMessage());
         }
         
         return list;
     }
-    
-    public boolean insert (Game obj){
-        if(obj == null) {
-            return false;
-        }
-        
-        if(obj.getNumGame()== null){
-            Integer id = getList().size() +1;
-            obj.setNumGame(id);
-            Data.listGame.add(obj);
-        }else{
-            Data.listGame.add(obj);
-        }
-        return true;
-    }
-    
-    public boolean remove (Game obj){
-        Data.listGame.remove(obj);
-        return true;
-    }
+
 }

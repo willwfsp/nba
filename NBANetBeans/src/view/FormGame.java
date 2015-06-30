@@ -5,7 +5,11 @@
  */
 package view;
 
+import static com.sun.xml.internal.fastinfoset.alphabet.BuiltInRestrictedAlphabets.table;
 import java.util.ArrayList;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import model.BoxScore;
 import model.Game;
 import model.dao.DAOBoxScore;
 import model.dao.DAOGame;
@@ -15,19 +19,127 @@ import model.dao.DAOGame;
  * @author will
  */
 public class FormGame extends javax.swing.JDialog {
-
+    DAOGame daoGame = new DAOGame();
+    DAOBoxScore daoBoxScore = new DAOBoxScore();
     /**
      * Creates new form FormGame
      */
     public FormGame(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        DAOGame daoGame = new DAOGame();
-        DAOBoxScore daoBoxScore = new DAOBoxScore();
         
+        
+        updateGameList();
+        updateBoxScoreList();
+        updateUI();
+        setTableListener();
+        
+    }
+    
+    private void setTableListener(){
+        tableGames.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
+        public void valueChanged(ListSelectionEvent event) {
+            // do some actions here, for example
+            // print first column value from selected row
+            System.out.println(tableGames.getValueAt(tableGames.getSelectedRow(), 0).toString());
+            updateUI();
+        }
+    });
+    }
+    
+    private void updateGameList() {
+        gameList.clear();
         gameList.addAll(daoGame.getList());
-        boxScoreList.addAll(daoBoxScore.getListFromGame(164));
         
+        int index = gameList.size() -1;
+        if(index >= 0){
+            tableGames.setRowSelectionInterval(index, index);
+            tableGames.getCellRect(index, index, true);
+        }
+    }
+    
+    private void updateBoxScoreList() {
+        boxScoreList.clear();
+        
+        int id = gameList.get(tableGames.getSelectedRow()).getNumGame();
+        boxScoreList.addAll(daoBoxScore.getListFromGame(id));
+        
+        if(boxScoreList.size() > 0){
+            boxScoreTable.setRowSelectionInterval(0, 0);
+            boxScoreTable.getCellRect(0, 0, true);
+            boxScoreTable.setVisible(true);
+        }else{
+            boxScoreTable.setVisible(false);
+        }
+    }
+    
+  
+    
+    
+    private void setFranchisesLabel (){
+        String franchise1 = new String();
+        String franchise2 = new String();
+        int points1 = 0;
+        int points2 = 0;
+        if(boxScoreList.size() == 0){
+            System.out.println("Sem boxScore");
+            return;
+        }
+        BoxScore bx = new BoxScore();
+        bx = (BoxScore)boxScoreList.get(0);
+        
+        franchise1 = bx.getFranchise().toString();
+        
+        for(int i = 0; i < boxScoreList.size(); i++){
+            BoxScore bx2 = new BoxScore();
+            bx2 = (BoxScore)boxScoreList.get(i);
+            if(!bx.getFranchise().equals(bx2.getFranchise())){
+                franchise2 = bx2.getFranchise().toString();
+                break;
+            }
+        }
+        
+        franchLabel1.setText(franchise1);
+        franchLabel2.setText(franchise2);
+        
+        
+        bx = new BoxScore();
+        
+        bx = bx = (BoxScore)boxScoreList.get(0);
+        
+        for(int i = 0; i < boxScoreList.size(); i++){
+            BoxScore bx2 = new BoxScore();
+            bx2 = (BoxScore)boxScoreList.get(i);
+            if(bx.getFranchise().equals(bx2.getFranchise())){
+                points1 += bx2.getPt2()+bx2.getPt3();
+        
+            }else{
+                for(int j = i; j < boxScoreList.size(); j ++){
+                    bx2 = (BoxScore)boxScoreList.get(j);
+                    points2 += bx2.getPt2()+bx2.getPt3();
+                }
+                break;
+            }
+        }
+        
+        scoreFranchLabel1.setText(""+points1);
+        scoreFranchLabel2.setText(""+points2);
+    }
+    
+    private void updateUI (){
+        
+        
+        int selectedRow = tableGames.getSelectedRow();
+        
+        Game game = new Game();
+        game = gameList.get(selectedRow);
+        
+        numLabel.setText(game.getNumGame().toString());
+        dateLabel.setText(game.getFormattedDate());
+        hourLabel.setText(game.getFormattedHour());
+        arenaLabel.setText(game.getArena().toString());
+        updateBoxScoreList();
+        setFranchisesLabel();
     }
 
     /**
@@ -46,8 +158,8 @@ public class FormGame extends javax.swing.JDialog {
         ;
         dateConverter1 = new utils.DateConverter();
         jTabbedPane1 = new javax.swing.JTabbedPane();
-        table = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jScrollPane = new javax.swing.JScrollPane();
+        tableGames = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         firstButton = new javax.swing.JButton();
@@ -56,30 +168,30 @@ public class FormGame extends javax.swing.JDialog {
         lastButton = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        boxScoreTable = new javax.swing.JTable();
         jPanel4 = new javax.swing.JPanel();
         newButton = new javax.swing.JButton();
         editButton = new javax.swing.JButton();
         deleteButton = new javax.swing.JButton();
         saveButton = new javax.swing.JButton();
         cancelButton = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        numLabel = new javax.swing.JLabel();
+        franchLabel1 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
+        franchLabel2 = new javax.swing.JLabel();
+        arenaLabel = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
-        jLabel12 = new javax.swing.JLabel();
-        jLabel13 = new javax.swing.JLabel();
+        scoreFranchLabel1 = new javax.swing.JLabel();
+        scoreFranchLabel2 = new javax.swing.JLabel();
+        dateLabel = new javax.swing.JLabel();
+        hourLabel = new javax.swing.JLabel();
+        seasonLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, gameList, jTable1);
+        org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, gameList, tableGames);
         org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${season}"));
         columnBinding.setColumnName("Season");
         columnBinding.setColumnClass(Integer.class);
@@ -97,12 +209,12 @@ public class FormGame extends javax.swing.JDialog {
         columnBinding.setColumnClass(String.class);
         bindingGroup.addBinding(jTableBinding);
         jTableBinding.bind();
-        table.setViewportView(jTable1);
+        jScrollPane.setViewportView(tableGames);
 
-        jTabbedPane1.addTab("Visão geral", table);
+        jTabbedPane1.addTab("Visão geral", jScrollPane);
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Navegação"));
-        jPanel2.setLayout(new java.awt.GridLayout());
+        jPanel2.setLayout(new java.awt.GridLayout(1, 0));
 
         firstButton.setText("Primeiro");
         firstButton.addActionListener(new java.awt.event.ActionListener() {
@@ -113,72 +225,111 @@ public class FormGame extends javax.swing.JDialog {
         jPanel2.add(firstButton);
 
         backButton.setText("Anterior");
+        backButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backButtonActionPerformed(evt);
+            }
+        });
         jPanel2.add(backButton);
 
         nextButton.setText("Próximo");
+        nextButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nextButtonActionPerformed(evt);
+            }
+        });
         jPanel2.add(nextButton);
 
         lastButton.setText("Último");
+        lastButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                lastButtonActionPerformed(evt);
+            }
+        });
         jPanel2.add(lastButton);
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Box Scores"));
         jPanel3.setLayout(new java.awt.BorderLayout());
 
-        jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, boxScoreList, jTable2);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${idFranchise}"));
-        columnBinding.setColumnName("Id Franchise");
-        columnBinding.setColumnClass(Integer.class);
+        jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+
+        boxScoreTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
+
+        jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, boxScoreList, boxScoreTable);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${franchise}"));
+        columnBinding.setColumnName("Franchise");
+        columnBinding.setColumnClass(model.Franchise.class);
+        columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${idPlayer}"));
         columnBinding.setColumnName("Id Player");
         columnBinding.setColumnClass(Integer.class);
+        columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${starter}"));
         columnBinding.setColumnName("Starter");
         columnBinding.setColumnClass(Boolean.class);
+        columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${pt2}"));
         columnBinding.setColumnName("Pt2");
         columnBinding.setColumnClass(Integer.class);
+        columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${pt3}"));
         columnBinding.setColumnName("Pt3");
         columnBinding.setColumnClass(Integer.class);
+        columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${assist}"));
         columnBinding.setColumnName("Assist");
         columnBinding.setColumnClass(Integer.class);
+        columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${block}"));
         columnBinding.setColumnName("Block");
         columnBinding.setColumnClass(Integer.class);
+        columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${oReb}"));
         columnBinding.setColumnName("OReb");
         columnBinding.setColumnClass(Integer.class);
+        columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${dReb}"));
         columnBinding.setColumnName("DReb");
         columnBinding.setColumnClass(Integer.class);
+        columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${fg}"));
         columnBinding.setColumnName("Fg");
         columnBinding.setColumnClass(Integer.class);
+        columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${fga}"));
         columnBinding.setColumnName("Fga");
         columnBinding.setColumnClass(Integer.class);
+        columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${ft}"));
         columnBinding.setColumnName("Ft");
         columnBinding.setColumnClass(Integer.class);
+        columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${steal}"));
         columnBinding.setColumnName("Steal");
         columnBinding.setColumnClass(Integer.class);
+        columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${segs}"));
         columnBinding.setColumnName("Segs");
         columnBinding.setColumnClass(Integer.class);
+        columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${turnOver}"));
         columnBinding.setColumnName("Turn Over");
         columnBinding.setColumnClass(Integer.class);
+        columnBinding.setEditable(false);
         bindingGroup.addBinding(jTableBinding);
         jTableBinding.bind();
-        jScrollPane1.setViewportView(jTable2);
+        jScrollPane1.setViewportView(boxScoreTable);
+        if (boxScoreTable.getColumnModel().getColumnCount() > 0) {
+            boxScoreTable.getColumnModel().getColumn(14).setMinWidth(10);
+            boxScoreTable.getColumnModel().getColumn(14).setPreferredWidth(15);
+            boxScoreTable.getColumnModel().getColumn(14).setMaxWidth(20);
+        }
 
         jPanel3.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Ações"));
         jPanel4.setForeground(java.awt.Color.gray);
-        jPanel4.setLayout(new java.awt.GridLayout());
+        jPanel4.setLayout(new java.awt.GridLayout(1, 0));
 
         newButton.setText("Novo");
         jPanel4.add(newButton);
@@ -195,29 +346,29 @@ public class FormGame extends javax.swing.JDialog {
         cancelButton.setText("Cancelar");
         jPanel4.add(cancelButton);
 
-        jLabel1.setFont(new java.awt.Font("Ubuntu", 1, 18)); // NOI18N
-        jLabel1.setForeground(java.awt.Color.gray);
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel1.setText("111");
+        numLabel.setFont(new java.awt.Font("Ubuntu", 1, 18)); // NOI18N
+        numLabel.setForeground(java.awt.Color.gray);
+        numLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        numLabel.setText("111");
 
-        jLabel2.setFont(new java.awt.Font("Ubuntu", 1, 18)); // NOI18N
-        jLabel2.setForeground(java.awt.Color.darkGray);
-        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel2.setText("San Atonio Spurs");
+        franchLabel1.setFont(new java.awt.Font("Ubuntu", 1, 18)); // NOI18N
+        franchLabel1.setForeground(java.awt.Color.darkGray);
+        franchLabel1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        franchLabel1.setText("San Atonio Spurs");
 
         jLabel3.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
         jLabel3.setForeground(java.awt.Color.gray);
         jLabel3.setText("vs");
 
-        jLabel4.setFont(new java.awt.Font("Ubuntu", 1, 18)); // NOI18N
-        jLabel4.setForeground(java.awt.Color.darkGray);
-        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel4.setText("Maiami Hats");
+        franchLabel2.setFont(new java.awt.Font("Ubuntu", 1, 18)); // NOI18N
+        franchLabel2.setForeground(java.awt.Color.darkGray);
+        franchLabel2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        franchLabel2.setText("Maiami Hats");
 
-        jLabel5.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
-        jLabel5.setForeground(java.awt.Color.darkGray);
-        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel5.setText("AT&T Arena");
+        arenaLabel.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        arenaLabel.setForeground(java.awt.Color.darkGray);
+        arenaLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        arenaLabel.setText("AT&T Arena");
 
         jLabel6.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
         jLabel6.setForeground(java.awt.Color.gray);
@@ -234,70 +385,73 @@ public class FormGame extends javax.swing.JDialog {
         jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel8.setText("Temporada:");
 
-        jLabel9.setFont(new java.awt.Font("Ubuntu", 0, 24)); // NOI18N
-        jLabel9.setForeground(java.awt.Color.gray);
-        jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel9.setText("120");
+        scoreFranchLabel1.setFont(new java.awt.Font("Ubuntu", 0, 24)); // NOI18N
+        scoreFranchLabel1.setForeground(java.awt.Color.gray);
+        scoreFranchLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        scoreFranchLabel1.setText("120");
 
-        jLabel10.setFont(new java.awt.Font("Ubuntu", 0, 24)); // NOI18N
-        jLabel10.setForeground(java.awt.Color.gray);
-        jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel10.setText("105");
+        scoreFranchLabel2.setFont(new java.awt.Font("Ubuntu", 0, 24)); // NOI18N
+        scoreFranchLabel2.setForeground(java.awt.Color.gray);
+        scoreFranchLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        scoreFranchLabel2.setText("105");
 
-        jLabel11.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
-        jLabel11.setForeground(java.awt.Color.darkGray);
-        jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel11.setText("25 Jan 2014");
+        dateLabel.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        dateLabel.setForeground(java.awt.Color.darkGray);
+        dateLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        dateLabel.setText("25 Jan 2014");
 
-        jLabel12.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
-        jLabel12.setForeground(java.awt.Color.darkGray);
-        jLabel12.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel12.setText("21:45");
+        hourLabel.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        hourLabel.setForeground(java.awt.Color.darkGray);
+        hourLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        hourLabel.setText("21:45");
 
-        jLabel13.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
-        jLabel13.setForeground(java.awt.Color.darkGray);
-        jLabel13.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel13.setText("2014");
+        seasonLabel.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        seasonLabel.setForeground(java.awt.Color.darkGray);
+        seasonLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        seasonLabel.setText("2014");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 726, Short.MAX_VALUE)
             .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel10)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 339, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(arenaLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(franchLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(scoreFranchLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel3)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(scoreFranchLabel2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(franchLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 288, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 0, Short.MAX_VALUE))
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(hourLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(dateLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addContainerGap())
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(seasonLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                        .addComponent(numLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(20, 20, 20))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -305,26 +459,26 @@ public class FormGame extends javax.swing.JDialog {
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
+                    .addComponent(franchLabel1)
                     .addComponent(jLabel3)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(franchLabel2)
+                    .addComponent(scoreFranchLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(scoreFranchLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel5)
+                .addComponent(arenaLabel)
                 .addGap(13, 13, 13)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
-                    .addComponent(jLabel11))
+                    .addComponent(dateLabel))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
-                    .addComponent(jLabel12))
+                    .addComponent(hourLabel))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
-                    .addComponent(jLabel13)
-                    .addComponent(jLabel1))
+                    .addComponent(seasonLabel)
+                    .addComponent(numLabel))
                 .addGap(23, 23, 23)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -350,8 +504,55 @@ public class FormGame extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void firstButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_firstButtonActionPerformed
-        // TODO add your handling code here:
+        if(gameList.size() == 0){
+            return;
+        }
+        tableGames.setRowSelectionInterval(0, 0);
+        tableGames.getCellRect(0, 0, true);
+        updateUI();
     }//GEN-LAST:event_firstButtonActionPerformed
+
+    private void lastButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lastButtonActionPerformed
+        if(gameList.size() == 0){
+            return;
+        }
+        int index = gameList.size() -1;
+        tableGames.setRowSelectionInterval(index, index);
+        tableGames.getCellRect(index, index, true);
+        updateUI();
+    }//GEN-LAST:event_lastButtonActionPerformed
+
+    private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
+        if(gameList.size() == 0){
+            return;
+        }
+        int selected = tableGames.getSelectedRow();
+        
+        if(selected == 0){
+            return;
+        }
+        
+        int back = selected -1;
+        tableGames.setRowSelectionInterval(back, back);
+        tableGames.getCellRect(back, back, true);
+        updateUI();
+    }//GEN-LAST:event_backButtonActionPerformed
+
+    private void nextButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nextButtonActionPerformed
+        if(gameList.size() == 0){
+            return;
+        }
+        int selected = tableGames.getSelectedRow();
+        
+        if(selected == gameList.size()-1){
+            return;
+        }
+        
+        int next = selected +1;
+        tableGames.setRowSelectionInterval(next, next);
+        tableGames.getCellRect(next, next, true);
+        updateUI();
+    }//GEN-LAST:event_nextButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -396,40 +597,40 @@ public class FormGame extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel arenaLabel;
     private javax.swing.JButton backButton;
     private java.util.List<model.BoxScore> boxScoreList;
+    private javax.swing.JTable boxScoreTable;
     private javax.swing.JButton cancelButton;
     private utils.DateConverter dateConverter1;
+    private javax.swing.JLabel dateLabel;
     private javax.swing.JButton deleteButton;
     private javax.swing.JButton editButton;
     private javax.swing.JButton firstButton;
+    private javax.swing.JLabel franchLabel1;
+    private javax.swing.JLabel franchLabel2;
     private java.util.List<model.Game> gameList;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel hourLabel;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JScrollPane jScrollPane;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
     private javax.swing.JButton lastButton;
     private javax.swing.JButton newButton;
     private javax.swing.JButton nextButton;
+    private javax.swing.JLabel numLabel;
     private javax.swing.JButton saveButton;
-    private javax.swing.JScrollPane table;
+    private javax.swing.JLabel scoreFranchLabel1;
+    private javax.swing.JLabel scoreFranchLabel2;
+    private javax.swing.JLabel seasonLabel;
+    private javax.swing.JTable tableGames;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 }

@@ -6,8 +6,6 @@
 package model;
 
 import java.io.Serializable;
-import java.sql.Time;
-import java.util.Calendar;
 import java.util.Objects;
 
 /**
@@ -30,7 +28,7 @@ public class BoxScore implements Serializable{
     private Integer turnOver;
     private Integer idContract;
     private Integer idPlayer;
-    private Integer idFranchise;
+    private Franchise franchise;
     private Integer numGame;
 
     public BoxScore() {
@@ -156,12 +154,12 @@ public class BoxScore implements Serializable{
         this.idPlayer = idPlayer;
     }
 
-    public Integer getIdFranchise() {
-        return idFranchise;
+    public Franchise getFranchise() {
+        return franchise;
     }
 
-    public void setIdFranchise(Integer idFranchise) {
-        this.idFranchise = idFranchise;
+    public void setFranchise(Franchise franchise) {
+        this.franchise = franchise;
     }
 
     public Integer getNumGame() {
@@ -177,7 +175,7 @@ public class BoxScore implements Serializable{
         int hash = 7;
         hash = 23 * hash + Objects.hashCode(this.idContract);
         hash = 23 * hash + Objects.hashCode(this.idPlayer);
-        hash = 23 * hash + Objects.hashCode(this.idFranchise);
+        hash = 23 * hash + Objects.hashCode(this.franchise);
         hash = 23 * hash + Objects.hashCode(this.numGame);
         return hash;
     }
@@ -197,7 +195,7 @@ public class BoxScore implements Serializable{
         if (!Objects.equals(this.idPlayer, other.idPlayer)) {
             return false;
         }
-        if (!Objects.equals(this.idFranchise, other.idFranchise)) {
+        if (!Objects.equals(this.franchise, other.franchise)) {
             return false;
         }
         if (!Objects.equals(this.numGame, other.numGame)) {

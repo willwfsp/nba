@@ -19,21 +19,18 @@ import model.OracleJDBC;
  * @author will
  */
 public class DAOBoxScore {
-    public List<BoxScore> getListFromGame (Integer gameId){
+    public List<BoxScore> getListFromGame (int gameId){
         
         
         String sql = "select * from boxscore where numGame = "+ gameId;
         List<BoxScore> list = new ArrayList<>();
-            
+        DAOFranchise daoF = new DAOFranchise();
         try {  
             PreparedStatement pst = OracleJDBC.getPreparedStatement(sql);
             ResultSet rs = pst.executeQuery();
             while(rs.next()){
                 BoxScore bs = new BoxScore();
                 bs.setNumGame(rs.getInt("numgame"));
-                bs.setIdContract(rs.getInt("idcontract"));
-                bs.setIdFranchise(rs.getInt("idfranchise"));
-                bs.setIdPlayer(rs.getInt("idplayer"));
                 bs.setStarter(rs.getBoolean("starter"));
                 bs.setSegs(rs.getInt("segs"));
                 bs.setFg(rs.getInt("fg"));
@@ -47,7 +44,9 @@ public class DAOBoxScore {
                 bs.setTurnOver(rs.getInt("turnover"));
                 bs.setdReb(rs.getInt("d_reb"));
                 bs.setoReb(rs.getInt("o_reb"));
-                
+                bs.setIdContract(rs.getInt("idcontract"));
+                bs.setIdPlayer(rs.getInt("idplayer"));
+                bs.setFranchise(daoF.getFranchiseById(rs.getInt("idfranchise")));
                 list.add(bs);
             }
             
