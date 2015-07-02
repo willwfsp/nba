@@ -138,6 +138,7 @@ public class FormGame extends javax.swing.JDialog {
         dateLabel.setText(game.getFormattedDate());
         hourLabel.setText(game.getFormattedHour());
         arenaLabel.setText(game.getArena().toString());
+        seasonLabel.setText(game.getSeason().toString());
         updateBoxScoreList();
         setFranchisesLabel();
     }
@@ -200,7 +201,7 @@ public class FormGame extends javax.swing.JDialog {
         columnBinding.setColumnClass(Integer.class);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${arena}"));
         columnBinding.setColumnName("Arena");
-        columnBinding.setColumnClass(model.Arena.class);
+        columnBinding.setColumnClass(model.domain.Arena.class);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${formattedDate}"));
         columnBinding.setColumnName("Formatted Date");
         columnBinding.setColumnClass(String.class);
@@ -258,7 +259,7 @@ public class FormGame extends javax.swing.JDialog {
         jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, boxScoreList, boxScoreTable);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${franchise}"));
         columnBinding.setColumnName("Franchise");
-        columnBinding.setColumnClass(model.Franchise.class);
+        columnBinding.setColumnClass(model.domain.Franchise.class);
         columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${idPlayer}"));
         columnBinding.setColumnName("Id Player");

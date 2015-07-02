@@ -5,32 +5,28 @@
  */
 package model;
 
+import model.domain.Player;
 import java.io.Serializable;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Objects;
+import model.domain.Franchise;
 
 /**
  *
  * @author will
  */
 public class AssetPlayer implements Serializable {
-    private Integer idPlayer;
+    private Player player;
     private Integer idContract;
-    private Integer idFranchise; // Necessário criar um model para Franchise
+    private Franchise franchise; 
     private Double salary;
-    private Calendar endC;
-    private Calendar startC;
+    private Date endC;
+    private Date startC;
 
     public AssetPlayer() {
     }
 
-    public Integer getIdPlayer() {
-        return idPlayer;
-    }
-
-    public void setIdPlayer(Integer idPlayer) {
-        this.idPlayer = idPlayer;
-    }
 
     public Integer getIdContract() {
         return idContract;
@@ -40,13 +36,6 @@ public class AssetPlayer implements Serializable {
         this.idContract = idContract;
     }
 
-    public Integer getIdFranchise() {
-        return idFranchise;
-    }
-
-    public void setIdFranchise(Integer idFranchise) {
-        this.idFranchise = idFranchise;
-    }
 
     public Double getSalary() {
         return salary;
@@ -56,28 +45,44 @@ public class AssetPlayer implements Serializable {
         this.salary = salary;
     }
 
-    public Calendar getEndC() {
+    public Date getEndC() {
         return endC;
     }
 
-    public void setEndC(Calendar endC) {
+    public void setEndC(Date endC) {
         this.endC = endC;
     }
 
-    public Calendar getStartC() {
+    public Date getStartC() {
         return startC;
     }
 
-    public void setStartC(Calendar startC) {
+    public void setStartC(Date startC) {
         this.startC = startC;
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
+
+    public Franchise getFranchise() {
+        return franchise;
+    }
+
+    public void setFranchise(Franchise franchise) {
+        this.franchise = franchise;
     }
 
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 97 * hash + Objects.hashCode(this.idPlayer);
-        hash = 97 * hash + Objects.hashCode(this.idContract);
-        hash = 97 * hash + Objects.hashCode(this.idFranchise);
+        hash = 37 * hash + Objects.hashCode(this.player);
+        hash = 37 * hash + Objects.hashCode(this.idContract);
+        hash = 37 * hash + Objects.hashCode(this.franchise);
         return hash;
     }
 
@@ -90,16 +95,17 @@ public class AssetPlayer implements Serializable {
             return false;
         }
         final AssetPlayer other = (AssetPlayer) obj;
-        if (!Objects.equals(this.idPlayer, other.idPlayer)) {
+        if (!Objects.equals(this.player, other.player)) {
             return false;
         }
         if (!Objects.equals(this.idContract, other.idContract)) {
             return false;
         }
-        if (!Objects.equals(this.idFranchise, other.idFranchise)) {
+        if (!Objects.equals(this.franchise, other.franchise)) {
             return false;
         }
         return true;
     }
-    
+
+
 }

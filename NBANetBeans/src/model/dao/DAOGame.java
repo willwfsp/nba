@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import javax.swing.JOptionPane;
-import model.Arena;
+import model.domain.Arena;
 import model.Game;
 import model.OracleJDBC;
 
@@ -24,7 +24,7 @@ public class DAOGame {
     public List<Game> getList (){
         
         
-        String sql =    "select distinct g.numgame, g.dateg, g.hourg, g.idArena, g.idSeason, s.name, a.address, a.idFranchise, a.idSponsor " +
+        String sql =    "select distinct g.numgame, g.dateg, g.hourg, g.idArena, g.idSeason, s.name " +
                         "from game g, arena a, sponsor s, boxscore b " +
                         "where a.idSponsor = s.idSponsor AND " +
                         "a.idArena = g.idArena AND b.numGame = g.numGame " +
@@ -35,18 +35,10 @@ public class DAOGame {
             PreparedStatement pst = OracleJDBC.getPreparedStatement(sql);
             ResultSet rs = pst.executeQuery();
             while(rs.next()){
-
+                DAOArena dao = new DAOArena();
                 Game game = new Game();
                 game.setNumGame(rs.getInt("numgame"));
-                Arena arena = new Arena();
-                
-                arena.setAddress(rs.getString("address"));
-                arena.setIdFranchise(rs.getInt("idFranchise"));
-                arena.setIdSponsor(rs.getInt("idSponsor"));
-                arena.setIdArena(rs.getInt("idArena"));
-                arena.setName(rs.getString("name"));
-                
-                game.setArena(arena);
+                game.setArena(dao.getArenaById(rs.getInt("idArena")));
                 game.setSeason(rs.getInt("idseason"));
                 game.setDate(rs.getDate("dateg"));
                 

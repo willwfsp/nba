@@ -3,20 +3,27 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package model;
+package model.domain;
 
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.Objects;
 
 /**
  * Classe model para Player no padrão JavaBeans
+ *
  * @author will
  */
-public class Player implements Serializable{
+public class Player implements Serializable {
+
     private Integer idPerson;
     private String hSchool;
     private String position;
     private String college;
+    private String name;
+    private String surname;
+    private Calendar bDate;
+    private String country;
 
     public Player() {
     }
@@ -74,7 +81,42 @@ public class Player implements Serializable{
         }
         return true;
     }
-    
-    
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    public Calendar getbDate() {
+        return bDate;
+    }
+
+    public void setbDate(Calendar bDate) {
+        this.bDate = bDate;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    @Override
+    public String toString() {
+        return name + " " + surname;
+    }
 
 }

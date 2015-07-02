@@ -5,6 +5,7 @@
  */
 package model;
 
+import model.domain.Arena;
 import java.beans.Transient;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;

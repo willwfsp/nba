@@ -114,7 +114,7 @@
                   </Subbinding>
                   <Subbinding sourcePath="${arena}">
                     <BindingParameter name="NAME" value="Arena"/>
-                    <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="model.Arena.class"/>
+                    <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="model.domain.Arena.class"/>
                   </Subbinding>
                   <Subbinding sourcePath="${formattedDate}">
                     <BindingParameter name="NAME" value="Formatted Date"/>
@@ -394,7 +394,7 @@
                         <BindingProperty name="elements" source="boxScoreList" target="boxScoreTable" targetPath="elements" updateStrategy="0" immediately="true">
                           <Subbinding sourcePath="${franchise}">
                             <BindingParameter name="NAME" value="Franchise"/>
-                            <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="model.Franchise.class"/>
+                            <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="model.domain.Franchise.class"/>
                             <BindingParameter name="javax.swing.binding.ParameterKeys.EDITABLE" value="false"/>
                           </Subbinding>
                           <Subbinding sourcePath="${idPlayer}">

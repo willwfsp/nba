@@ -5,6 +5,7 @@
  */
 package model;
 
+import model.domain.Franchise;
 import java.io.Serializable;
 import java.util.Objects;
 
