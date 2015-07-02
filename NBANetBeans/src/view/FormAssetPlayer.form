@@ -74,9 +74,6 @@
                 <Component class="javax.swing.JTable" name="jTable1">
                   <BindingProperties>
                     <BindingProperty name="elements" source="assetPlayerList" target="jTable1" targetPath="elements" updateStrategy="0" immediately="true">
-                      <Subbinding sourcePath="${endC}">
-                        <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="java.util.Calendar.class"/>
-                      </Subbinding>
                       <Subbinding sourcePath="${franchise}">
                         <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="model.domain.Franchise.class"/>
                       </Subbinding>
@@ -88,9 +85,6 @@
                       </Subbinding>
                       <Subbinding sourcePath="${salary}">
                         <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="Double.class"/>
-                      </Subbinding>
-                      <Subbinding sourcePath="${startC}">
-                        <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="java.util.Calendar.class"/>
                       </Subbinding>
                     </BindingProperty>
                   </BindingProperties>

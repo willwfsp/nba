@@ -7,6 +7,7 @@ package view;
 
 import java.util.ArrayList;
 import model.AssetPlayer;
+import model.dao.DAOAssetPlayer;
 import model.dao.DAOFranchise;
 import model.dao.DAOPlayer;
 import model.domain.Franchise;
@@ -32,10 +33,14 @@ public class FormAssetPlayer extends javax.swing.JDialog {
         
         playerList.clear();
         playerList.addAll(daoPlayer.getList());
+        
+        atualizaLista();
     }
     
     public void atualizaLista(){
-
+        DAOAssetPlayer daoAS = new DAOAssetPlayer();
+        assetPlayerList.clear();
+        assetPlayerList.addAll(daoAS.getList());
     
     }
 
@@ -91,10 +96,7 @@ public class FormAssetPlayer extends javax.swing.JDialog {
         jPanel1.setLayout(new java.awt.GridLayout());
 
         org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, assetPlayerList, jTable1);
-        org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${endC}"));
-        columnBinding.setColumnName("End C");
-        columnBinding.setColumnClass(java.util.Calendar.class);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${franchise}"));
+        org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${franchise}"));
         columnBinding.setColumnName("Franchise");
         columnBinding.setColumnClass(model.domain.Franchise.class);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${idContract}"));
@@ -106,9 +108,6 @@ public class FormAssetPlayer extends javax.swing.JDialog {
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${salary}"));
         columnBinding.setColumnName("Salary");
         columnBinding.setColumnClass(Double.class);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${startC}"));
-        columnBinding.setColumnName("Start C");
-        columnBinding.setColumnClass(java.util.Calendar.class);
         bindingGroup.addBinding(jTableBinding);
         jTableBinding.bind();
 
