@@ -5,6 +5,7 @@
  */
 package model;
 
+import java.beans.Transient;
 import model.domain.Player;
 import java.io.Serializable;
 import java.util.Calendar;
@@ -105,6 +106,11 @@ public class AssetPlayer implements Serializable {
             return false;
         }
         return true;
+    }
+    
+    @Transient
+    public String getFormattedSalary(){
+        return "US$ "+salary+",00";
     }
 
 

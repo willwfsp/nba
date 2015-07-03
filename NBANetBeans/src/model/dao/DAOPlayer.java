@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Objects;
 import javax.swing.JOptionPane;
 import model.OracleJDBC;
 import model.domain.Player;
@@ -69,7 +70,7 @@ public class DAOPlayer {
         }
         
         for(Player player : list){
-            if(player.getIdPerson()== idPerson){
+            if(Objects.equals(player.getIdPerson(), idPerson)){
                 return player;
             }
         }

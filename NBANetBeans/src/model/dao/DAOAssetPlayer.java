@@ -13,6 +13,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import model.AssetPlayer;
 import model.OracleJDBC;
+import model.domain.Player;
 
 /**
  *
@@ -27,9 +28,12 @@ public class DAOAssetPlayer {
         DAOFranchise daoF = new DAOFranchise();
         try {  
             PreparedStatement pst = OracleJDBC.getPreparedStatement(sql);
-            ResultSet rs = pst.executeQuery();
+            
             DAOFranchise daoFranchise = new DAOFranchise();
             DAOPlayer daoPlayer = new DAOPlayer();
+            daoPlayer.getList();
+            
+            ResultSet rs = pst.executeQuery();
             while(rs.next()){
                 AssetPlayer ap = new AssetPlayer();
                 

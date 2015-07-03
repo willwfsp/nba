@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import javax.swing.JOptionPane;
 import model.domain.Arena;
 import model.domain.Franchise;
@@ -57,7 +58,7 @@ public class DAOFranchise {
         }
         
         for (Franchise franc : list) {
-            if (franc.getIdFranchise() == idFranchise) {
+            if (Objects.equals(franc.getIdFranchise(), idFranchise)) {
                 return franc;
             }
         }
