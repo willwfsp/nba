@@ -5,7 +5,14 @@
  */
 package view;
 
+import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.AssetPlayer;
 import model.dao.DAOAssetPlayer;
 import model.dao.DAOFranchise;
@@ -108,7 +115,7 @@ public class FormAssetPlayer extends javax.swing.JDialog {
         newButton = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        saveButton = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -193,8 +200,13 @@ public class FormAssetPlayer extends javax.swing.JDialog {
         jButton2.setText("Excluir");
         jPanel3.add(jButton2);
 
-        jButton3.setText("Salvar");
-        jPanel3.add(jButton3);
+        saveButton.setText("Salvar");
+        saveButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveButtonActionPerformed(evt);
+            }
+        });
+        jPanel3.add(saveButton);
 
         jButton4.setText("Cancelar");
         jPanel3.add(jButton4);
@@ -327,7 +339,11 @@ public class FormAssetPlayer extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void newButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newButtonActionPerformed
-        // TODO add your handling code here:
+        franchiseComboBox.setSelectedIndex(0);
+        playerComboBox.setSelectedIndex(0);
+        salaryTextField.setText("0");
+        startTextField.setText("");
+        endTextField.setText("");
     }//GEN-LAST:event_newButtonActionPerformed
 
     private void firstButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_firstButtonActionPerformed
@@ -370,6 +386,43 @@ public class FormAssetPlayer extends javax.swing.JDialog {
         updateUI();
     }//GEN-LAST:event_lastButtonActionPerformed
 
+    private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
+        AssetPlayer ap = new AssetPlayer();
+        
+        ap.setFranchise(getSelectedFranchise());
+        ap.setPlayer(getSelectedPlayer());
+        ap.setStartC(convertToDate(startTextField.getText()));
+        ap.setEndC(convertToDate(endTextField.getText()));
+        ap.setSalary(Double.parseDouble(salaryTextField.getText()));
+        
+        DAOAssetPlayer dao = new DAOAssetPlayer();
+        dao.insert(ap);
+        
+        updateList();
+        updateUI();
+        
+    }//GEN-LAST:event_saveButtonActionPerformed
+    
+    private Player getSelectedPlayer(){
+        return (Player)playerComboBox.getSelectedItem();
+    } 
+    
+    private Franchise getSelectedFranchise(){
+        return (Franchise)franchiseComboBox.getSelectedItem();
+    }
+    
+    private java.sql.Date convertToDate(String str) {
+
+        DateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Date date = sf.parse(str);
+            return new java.sql.Date(date.getTime());
+        } catch (ParseException ex) {
+            Logger.getLogger(FormAssetPlayer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return null;
+    }
     /**
      * @param args the command line arguments
      */
@@ -422,7 +475,6 @@ public class FormAssetPlayer extends javax.swing.JDialog {
     private javax.swing.JLabel idContractLabel;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -444,6 +496,7 @@ public class FormAssetPlayer extends javax.swing.JDialog {
     private java.util.List<Player> playerList;
     private javax.swing.JButton previousButton;
     private javax.swing.JTextField salaryTextField;
+    private javax.swing.JButton saveButton;
     private javax.swing.JTextField startTextField;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables

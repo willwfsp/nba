@@ -74,7 +74,7 @@ public class DAOAssetPlayer {
         assetPlayer.setIdContract(list.size()+100);
         list.add(assetPlayer);
         
-        String sql = "INSERT INTO AseetPlayer (idContract, idPlayer, idFranchise, startC, endC, salary) VALUES(?,?,?,?,?,?)";
+        String sql = "INSERT INTO AssetPlayer (idContract, idPlayer, idFranchise, startC, endC, salary) VALUES(?,?,?,?,?,?)";
         try{
             PreparedStatement pst = OracleJDBC.getPreparedStatement(sql);
             pst.setInt(1, assetPlayer.getIdContract());
