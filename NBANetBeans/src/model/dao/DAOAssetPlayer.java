@@ -5,6 +5,7 @@
  */
 package model.dao;
 
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,18 +14,25 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import model.AssetPlayer;
 import model.OracleJDBC;
-import model.domain.Player;
 
 /**
  *
  * @author will
  */
 public class DAOAssetPlayer {
+    
+    
+    List<AssetPlayer> list = new ArrayList<>();
+    
+    /**
+     * Retorna todos os AssetPlayers
+     * @return lista de AssetPlayers
+     */
     public List<AssetPlayer> getList(){
         
         
         String sql = "select * from AssetPlayer a, Player p where p.idPerson = a.idPlayer order by idContract";
-        List<AssetPlayer> list = new ArrayList<>();
+        
         DAOFranchise daoF = new DAOFranchise();
         try {  
             PreparedStatement pst = OracleJDBC.getPreparedStatement(sql);
@@ -52,5 +60,36 @@ public class DAOAssetPlayer {
         }
         
         return list;
+    }
+    
+    /**
+     * Insere um novo AssetPlayer no banco
+     * @param assetPlayer novo assetPlayer
+     * @return Boolean sucesso ou falha
+     */
+    public Boolean insert(AssetPlayer assetPlayer){
+        if(list.isEmpty()){
+            getList();
+        }
+        assetPlayer.setIdContract(list.size()+100);
+        list.add(assetPlayer);
+        
+        String sql = "INSERT INTO AseetPlayer (idContract, idPlayer, idFranchise, startC, endC, salary) VALUES(?,?,?,?,?,?)";
+        try{
+            PreparedStatement pst = OracleJDBC.getPreparedStatement(sql);
+            pst.setInt(1, assetPlayer.getIdContract());
+            pst.setInt(2, assetPlayer.getPlayer().getIdPerson());
+            pst.setInt(3, assetPlayer.getFranchise().getIdFranchise());
+            pst.setDate(4, (Date) assetPlayer.getStartC());
+            pst.setDate(5, (Date) assetPlayer.getEndC());
+            pst.setDouble(6, assetPlayer.getSalary());
+            
+            pst.executeUpdate();
+        }catch (SQLException ex){
+            JOptionPane.showMessageDialog(null, "Erro ao inserir AssetPlayer.\nDetalhes: "+ex.getMessage());
+        }
+        
+	
+        return true;
     }
 }
