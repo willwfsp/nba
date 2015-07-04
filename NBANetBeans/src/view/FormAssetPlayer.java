@@ -369,7 +369,21 @@ public class FormAssetPlayer extends javax.swing.JDialog {
         assetPlayerTable.getCellRect(index, index, true);
         updateUI();
     }//GEN-LAST:event_lastButtonActionPerformed
-
+    private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {                                           
+        AssetPlayer ap = new AssetPlayer();
+        ap.setEndC(convertStringToDate(endTextField.getText()));
+        ap.setStartC(convertStringToDate(endTextField.getText()));
+        ap.setSalary(Double.parseDouble(salaryTextField.getText()));
+        ap.setPlayer(getSelectedPlayer());
+        ap.setFranchise(getSelectedFranchise());
+        
+        DAOAssetPlayer dao = new DAOAssetPlayer();
+        dao.insert(ap);
+        
+        updateList();
+        updateUI();
+        
+    } 
     /**
      * @param args the command line arguments
      */
