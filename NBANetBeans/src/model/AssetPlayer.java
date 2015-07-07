@@ -8,8 +8,9 @@ package model;
 import java.beans.Transient;
 import model.domain.Player;
 import java.io.Serializable;
-import java.util.Calendar;
+import java.text.NumberFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Objects;
 import model.domain.Franchise;
 
@@ -110,7 +111,9 @@ public class AssetPlayer implements Serializable {
     
     @Transient
     public String getFormattedSalary(){
-        return "US$ "+salary+",00";
+        NumberFormat formatter = NumberFormat.getCurrencyInstance(Locale.US);
+        String moneyString = formatter.format(getSalary());
+        return moneyString;
     }
 
 
