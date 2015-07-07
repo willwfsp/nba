@@ -5,12 +5,15 @@
  */
 package view;
 
-import java.sql.SQLException;
+import java.math.BigDecimal;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.AssetPlayer;
@@ -113,8 +116,8 @@ public class FormAssetPlayer extends javax.swing.JDialog {
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         newButton = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        editButton = new javax.swing.JButton();
+        deleteButton = new javax.swing.JButton();
         saveButton = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
@@ -194,11 +197,21 @@ public class FormAssetPlayer extends javax.swing.JDialog {
         });
         jPanel3.add(newButton);
 
-        jButton1.setText("Editar");
-        jPanel3.add(jButton1);
+        editButton.setText("Editar");
+        editButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editButtonActionPerformed(evt);
+            }
+        });
+        jPanel3.add(editButton);
 
-        jButton2.setText("Excluir");
-        jPanel3.add(jButton2);
+        deleteButton.setText("Excluir");
+        deleteButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteButtonActionPerformed(evt);
+            }
+        });
+        jPanel3.add(deleteButton);
 
         saveButton.setText("Salvar");
         saveButton.addActionListener(new java.awt.event.ActionListener() {
@@ -402,6 +415,27 @@ public class FormAssetPlayer extends javax.swing.JDialog {
         updateUI();
         
     }//GEN-LAST:event_saveButtonActionPerformed
+
+    private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
+        int index = assetPlayerTable.getSelectedRow();
+        AssetPlayer ap = (AssetPlayer)assetPlayerList.get(index);
+        
+        DAOAssetPlayer dao = new DAOAssetPlayer();
+        dao.remove(ap);
+        updateList();
+        updateUI();
+    }//GEN-LAST:event_deleteButtonActionPerformed
+
+    private void editButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editButtonActionPerformed
+        int index = assetPlayerTable.getSelectedRow();
+        AssetPlayer ap = (AssetPlayer)assetPlayerList.get(index);
+        
+        DAOAssetPlayer dao = new DAOAssetPlayer();
+        dao.delete(ap);
+        updateList();
+        updateUI();
+    }//GEN-LAST:event_editButtonActionPerformed
+    
     
     private Player getSelectedPlayer(){
         return (Player)playerComboBox.getSelectedItem();
@@ -468,13 +502,13 @@ public class FormAssetPlayer extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private java.util.List<AssetPlayer> assetPlayerList;
     private javax.swing.JTable assetPlayerTable;
+    private javax.swing.JButton deleteButton;
+    private javax.swing.JButton editButton;
     private javax.swing.JTextField endTextField;
     private javax.swing.JButton firstButton;
     private javax.swing.JComboBox franchiseComboBox;
     private java.util.List<Franchise> franchiseList;
     private javax.swing.JLabel idContractLabel;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

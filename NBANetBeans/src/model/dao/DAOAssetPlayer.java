@@ -9,8 +9,11 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import model.AssetPlayer;
 import model.OracleJDBC;
@@ -88,8 +91,39 @@ public class DAOAssetPlayer {
         }catch (SQLException ex){
             JOptionPane.showMessageDialog(null, "Erro ao inserir AssetPlayer.\nDetalhes: "+ex.getMessage());
         }
-        
-	
+
         return true;
     }
+    
+    public Boolean remove (AssetPlayer assetPlayer){
+        String sql = "DELETE FROM AssetPlayer WHERE idContract = " + assetPlayer.getIdContract();
+        
+        try {
+            PreparedStatement pst = OracleJDBC.getPreparedStatement(sql);
+            pst.executeUpdate(sql);
+            getList();
+            return true;
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao remover AssetPlayer.\nDetalhes: "+ex.getMessage());
+            return false;
+        }
+    }
+    
+    public Boolean delete (AssetPlayer assetPlayer){
+        PreparedStatement ps;
+        try {
+            ps = OracleJDBC.getConnection().prepareStatement(
+                    "UPDATE Messages SET salary = ?, startc = ?, endC = ? WHERE idContract = "+ assetPlayer.getIdContract() + " AND idPlayer = " + assetPlayer.getPlayer().getIdPerson() + " AND idFranchise = " + assetPlayer.getFranchise().getIdFranchise());
+            ps.setDouble(1,assetPlayer.getSalary());
+            ps.setDate(2, (Date) assetPlayer.getStartC());
+            ps.setDate(3, (Date) assetPlayer.getEndC());
+            return true;
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao atualizar AssetPlayer.\nDetalhes: "+ex.getMessage());
+        }
+        
+        return false;
+    }
+      
+
 }
