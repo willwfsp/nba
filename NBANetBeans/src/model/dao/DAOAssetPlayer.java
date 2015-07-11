@@ -76,7 +76,7 @@ public class DAOAssetPlayer {
         }
         
         if(assetPlayer.getIdContract() <= 0){
-            assetPlayer.setIdContract(list.size()+100);
+            assetPlayer.setIdContract(list.get(list.size()-1).getIdContract() +100);
             insert(assetPlayer);
         }else{
             update(assetPlayer);

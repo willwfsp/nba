@@ -5,6 +5,7 @@
  */
 package model.dao;
 
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import javax.swing.JOptionPane;
-import model.domain.Arena;
+import model.AssetPlayer;
 import model.Game;
 import model.OracleJDBC;
 
@@ -21,6 +22,9 @@ import model.OracleJDBC;
  * @author will
  */
 public class DAOGame {
+    
+    List<Game> list = new ArrayList<>();
+    
     public List<Game> getList (){
         
         
@@ -29,7 +33,6 @@ public class DAOGame {
                         "where a.idSponsor = s.idSponsor AND " +
                         "a.idArena = g.idArena AND b.numGame = g.numGame " +
                         "order by g.numGame";
-        List<Game> list = new ArrayList<>();
             
         try {  
             PreparedStatement pst = OracleJDBC.getPreparedStatement(sql);
@@ -56,6 +59,29 @@ public class DAOGame {
         }
         
         return list;
+    }
+    
+    public Boolean insert(Game game){
+        
+        if(list.isEmpty()){
+            getList();
+        }
+        game.setNumGame(list.get(list.size()-1).getNumGame()+100);
+        String sql = "INSERT INTO Game (numGame, date, hour, idArena, idSeason) VALUES(?,?,?,?,?)";
+        try{
+            PreparedStatement pst = OracleJDBC.getPreparedStatement(sql);
+            pst.setInt(1, game.getNumGame());
+            pst.setDate(2, (Date) game.getDate());
+            pst.setDate(3, (Date) game.getHour().getTime());
+            pst.setInt(4, game.getArena().getIdArena());
+            pst.setInt(5, game.getSeason());
+            pst.executeUpdate();
+            getList();
+            return true;
+        }catch (SQLException ex){
+            JOptionPane.showMessageDialog(null, "Erro ao inserir Jogo.\nDetalhes: "+ex.getMessage());
+            return false;
+        }
     }
 
 }

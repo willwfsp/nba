@@ -156,7 +156,6 @@ public class FormGame extends javax.swing.JDialog {
         ;
         boxScoreList = org.jdesktop.observablecollections.ObservableCollections.observableList(new ArrayList<model.BoxScore>())
         ;
-        dateConverter1 = new utils.DateConverter();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jScrollPane = new javax.swing.JScrollPane();
         tableGames = new javax.swing.JTable();
@@ -332,6 +331,11 @@ public class FormGame extends javax.swing.JDialog {
         jPanel4.setLayout(new java.awt.GridLayout(1, 0));
 
         newButton.setText("Novo");
+        newButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                newButtonActionPerformed(evt);
+            }
+        });
         jPanel4.add(newButton);
 
         editButton.setText("Editar");
@@ -415,7 +419,7 @@ public class FormGame extends javax.swing.JDialog {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 726, Short.MAX_VALUE)
+            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
@@ -443,7 +447,7 @@ public class FormGame extends javax.swing.JDialog {
                                         .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                         .addComponent(dateLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(0, 0, Short.MAX_VALUE)))
+                                .addGap(0, 501, Short.MAX_VALUE)))
                         .addContainerGap())
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -554,6 +558,15 @@ public class FormGame extends javax.swing.JDialog {
         updateUI();
     }//GEN-LAST:event_nextButtonActionPerformed
 
+    private void newButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newButtonActionPerformed
+        FormEditGames form = new FormEditGames(null, true);
+
+        form.setTitle("Inserção de Games");
+        form.setLocationRelativeTo(null);
+        form.setResizable(false);
+        form.setVisible(true);
+    }//GEN-LAST:event_newButtonActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -602,7 +615,6 @@ public class FormGame extends javax.swing.JDialog {
     private java.util.List<model.BoxScore> boxScoreList;
     private javax.swing.JTable boxScoreTable;
     private javax.swing.JButton cancelButton;
-    private utils.DateConverter dateConverter1;
     private javax.swing.JLabel dateLabel;
     private javax.swing.JButton deleteButton;
     private javax.swing.JButton editButton;
