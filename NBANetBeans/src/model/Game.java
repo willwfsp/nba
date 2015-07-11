@@ -20,7 +20,7 @@ import java.util.Objects;
 public class Game implements Serializable {
     private Integer numGame;
     private Date date;
-    private Calendar hour;
+    private Date hour;
     //private Integer arena;
     private Arena arena;
     private Integer Season;
@@ -44,11 +44,11 @@ public class Game implements Serializable {
         this.date = date;
     }
 
-    public Calendar getHour() {
+    public Date getHour() {
         return hour;
     }
 
-    public void setHour(Calendar hour) {
+    public void setHour(Date hour) {
         this.hour = hour;
     }
 

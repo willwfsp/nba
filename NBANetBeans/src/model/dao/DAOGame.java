@@ -44,13 +44,7 @@ public class DAOGame {
                 game.setArena(dao.getArenaById(rs.getInt("idArena")));
                 game.setSeason(rs.getInt("idseason"));
                 game.setDate(rs.getDate("dateg"));
-                
-                Calendar c = Calendar.getInstance();
-                java.sql.Time t = rs.getTime("hourg");
-                c.setTime(t);
-                
-                game.setHour(c);
-                
+                game.setHour(rs.getDate("hourg"));                
                 list.add(game);
             }
             
@@ -72,7 +66,7 @@ public class DAOGame {
             PreparedStatement pst = OracleJDBC.getPreparedStatement(sql);
             pst.setInt(1, game.getNumGame());
             pst.setDate(2, (Date) game.getDate());
-            pst.setDate(3, (Date) game.getHour().getTime());
+            pst.setDate(3, (Date) game.getHour());
             pst.setInt(4, game.getArena().getIdArena());
             pst.setInt(5, game.getSeason());
             pst.executeUpdate();

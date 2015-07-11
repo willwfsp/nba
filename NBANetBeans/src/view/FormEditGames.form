@@ -86,9 +86,9 @@
                           <Component id="franchise1ComboBox" alignment="0" max="32767" attributes="0"/>
                           <Component id="franchise2ComboBox" alignment="0" max="32767" attributes="0"/>
                           <Component id="arenaComboBox" max="32767" attributes="0"/>
-                          <Component id="jTextField11" max="32767" attributes="0"/>
-                          <Component id="jTextField12" max="32767" attributes="0"/>
-                          <Component id="jComboBox6" pref="154" max="32767" attributes="0"/>
+                          <Component id="dateTextField" max="32767" attributes="0"/>
+                          <Component id="hourTextField" max="32767" attributes="0"/>
+                          <Component id="seasonComboBox" pref="154" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace pref="140" max="32767" attributes="0"/>
                   </Group>
@@ -125,17 +125,17 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="jLabel14" alignment="1" min="-2" max="-2" attributes="0"/>
-                          <Component id="jTextField11" alignment="1" min="-2" max="-2" attributes="0"/>
+                          <Component id="dateTextField" alignment="1" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="jLabel15" alignment="1" min="-2" max="-2" attributes="0"/>
-                          <Component id="jTextField12" alignment="1" min="-2" max="-2" attributes="0"/>
+                          <Component id="hourTextField" alignment="1" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="jLabel17" alignment="1" min="-2" max="-2" attributes="0"/>
-                          <Component id="jComboBox6" alignment="1" min="-2" max="-2" attributes="0"/>
+                          <Component id="seasonComboBox" alignment="1" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace pref="94" max="32767" attributes="0"/>
                       <Component id="saveGameButton" min="-2" max="-2" attributes="0"/>
@@ -200,21 +200,22 @@
                 <BindingProperty name="elements" source="arenaList" target="arenaComboBox" targetPath="elements" updateStrategy="0" immediately="false"/>
               </BindingProperties>
             </Component>
-            <Component class="javax.swing.JTextField" name="jTextField11">
+            <Component class="javax.swing.JTextField" name="dateTextField">
             </Component>
-            <Component class="javax.swing.JTextField" name="jTextField12">
+            <Component class="javax.swing.JTextField" name="hourTextField">
             </Component>
-            <Component class="javax.swing.JComboBox" name="jComboBox6">
+            <Component class="javax.swing.JComboBox" name="seasonComboBox">
               <Properties>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                  <StringArray count="4">
-                    <StringItem index="0" value="Item 1"/>
-                    <StringItem index="1" value="Item 2"/>
-                    <StringItem index="2" value="Item 3"/>
-                    <StringItem index="3" value="Item 4"/>
+                  <StringArray count="2">
+                    <StringItem index="0" value="2013"/>
+                    <StringItem index="1" value="2014"/>
                   </StringArray>
                 </Property>
               </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;Integer&gt;"/>
+              </AuxValues>
             </Component>
             <Component class="javax.swing.JButton" name="saveGameButton">
               <Properties>

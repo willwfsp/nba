@@ -5,9 +5,17 @@
  */
 package view;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import model.Game;
 import model.dao.DAOArena;
 import model.dao.DAOFranchise;
+import model.dao.DAOGame;
 import model.dao.DAOPlayer;
 import model.domain.Arena;
 import model.domain.Franchise;
@@ -91,9 +99,9 @@ public class FormEditGames extends javax.swing.JDialog {
         franchise1ComboBox = new javax.swing.JComboBox();
         franchise2ComboBox = new javax.swing.JComboBox();
         arenaComboBox = new javax.swing.JComboBox();
-        jTextField11 = new javax.swing.JTextField();
-        jTextField12 = new javax.swing.JTextField();
-        jComboBox6 = new javax.swing.JComboBox();
+        dateTextField = new javax.swing.JTextField();
+        hourTextField = new javax.swing.JTextField();
+        seasonComboBox = new javax.swing.JComboBox<Integer>();
         saveGameButton = new javax.swing.JButton();
         boxScoreTab = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -151,7 +159,7 @@ public class FormEditGames extends javax.swing.JDialog {
         jComboBoxBinding = org.jdesktop.swingbinding.SwingBindings.createJComboBoxBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, arenaList, arenaComboBox);
         bindingGroup.addBinding(jComboBoxBinding);
 
-        jComboBox6.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        seasonComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "2013", "2014" }));
 
         saveGameButton.setText("Salvar");
         saveGameButton.addActionListener(new java.awt.event.ActionListener() {
@@ -180,9 +188,9 @@ public class FormEditGames extends javax.swing.JDialog {
                     .addComponent(franchise1ComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(franchise2ComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(arenaComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jTextField11)
-                    .addComponent(jTextField12)
-                    .addComponent(jComboBox6, 0, 154, Short.MAX_VALUE))
+                    .addComponent(dateTextField)
+                    .addComponent(hourTextField)
+                    .addComponent(seasonComboBox, 0, 154, Short.MAX_VALUE))
                 .addContainerGap(140, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, basicsTabLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -211,15 +219,15 @@ public class FormEditGames extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(basicsTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel14, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jTextField11, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(dateTextField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(basicsTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel15, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jTextField12, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(hourTextField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(basicsTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel17, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jComboBox6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(seasonComboBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 94, Short.MAX_VALUE)
                 .addComponent(saveGameButton)
                 .addContainerGap())
@@ -421,12 +429,37 @@ public class FormEditGames extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+     private java.sql.Date convertToDate(String str, String format) {
 
+        DateFormat sf = new SimpleDateFormat(format);
+        try {
+            Date date = sf.parse(str);
+            return new java.sql.Date(date.getTime());
+        } catch (ParseException ex) {
+            Logger.getLogger(FormAssetPlayer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return null;
+    }
     private void saveGameButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveGameButtonActionPerformed
         tabbedPanel.setEnabledAt(1, true);
         tabbedPanel.setSelectedIndex(1);
         tabbedPanel.setEnabledAt(0, false);
-        updateUI();
+        
+        Game game = new Game();
+        
+        game.setArena((Arena)arenaComboBox.getSelectedItem());
+        game.setDate(convertToDate(dateTextField.getText(), "yyyy-MM-dd"));
+        game.setHour(convertToDate(hourTextField.getText(), "HH:mm"));
+        game.setSeason(Integer.parseInt((String) seasonComboBox.getSelectedItem()));
+        
+        DAOGame dao = new DAOGame();
+        if(dao.insert(game)){
+            updateUI();
+        }
+        
+        
+        
     }//GEN-LAST:event_saveGameButtonActionPerformed
 
     /**
@@ -478,10 +511,11 @@ public class FormEditGames extends javax.swing.JDialog {
     private java.util.List<Arena> arenaList;
     private javax.swing.JPanel basicsTab;
     private javax.swing.JPanel boxScoreTab;
+    private javax.swing.JTextField dateTextField;
     private javax.swing.JComboBox franchise1ComboBox;
     private javax.swing.JComboBox franchise2ComboBox;
     private java.util.List<Franchise> franchiseList;
-    private javax.swing.JComboBox jComboBox6;
+    private javax.swing.JTextField hourTextField;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -506,8 +540,6 @@ public class FormEditGames extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField10;
-    private javax.swing.JTextField jTextField11;
-    private javax.swing.JTextField jTextField12;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
@@ -520,6 +552,7 @@ public class FormEditGames extends javax.swing.JDialog {
     private java.util.List<Player> playerList;
     private javax.swing.JButton saveBoxScorebutton;
     private javax.swing.JButton saveGameButton;
+    private javax.swing.JComboBox<Integer> seasonComboBox;
     private javax.swing.JTabbedPane tabbedPanel;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
