@@ -449,7 +449,7 @@ public class FormEditGames extends javax.swing.JDialog {
         Game game = new Game();
         
         game.setArena((Arena)arenaComboBox.getSelectedItem());
-        game.setDate(convertToDate(dateTextField.getText(), "yyyy-MM-dd"));
+        game.setDate(convertToDate(dateTextField.getText(), "dd/MM/yyyy"));
         game.setHour(convertToDate(hourTextField.getText(), "HH:mm"));
         game.setSeason(Integer.parseInt((String) seasonComboBox.getSelectedItem()));
         

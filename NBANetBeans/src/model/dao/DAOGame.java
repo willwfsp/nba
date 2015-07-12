@@ -61,7 +61,7 @@ public class DAOGame {
             getList();
         }
         game.setNumGame(list.get(list.size()-1).getNumGame()+100);
-        String sql = "INSERT INTO Game (numGame, date, hour, idArena, idSeason) VALUES(?,?,?,?,?)";
+        String sql = "INSERT INTO Game (numGame, dateg, hourg, idArena, idSeason) VALUES(?,?,?,?,?)";
         try{
             PreparedStatement pst = OracleJDBC.getPreparedStatement(sql);
             pst.setInt(1, game.getNumGame());
@@ -70,10 +70,10 @@ public class DAOGame {
             pst.setInt(4, game.getArena().getIdArena());
             pst.setInt(5, game.getSeason());
             pst.executeUpdate();
-            getList();
+            
             return true;
         }catch (SQLException ex){
-            JOptionPane.showMessageDialog(null, "Erro ao inserir Jogo.\nDetalhes: "+ex.getMessage());
+            JOptionPane.showMessageDialog(null, "Erro ao inserir Games.\nDetalhes: "+ex.getMessage());
             return false;
         }
     }
