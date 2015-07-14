@@ -119,7 +119,7 @@ public class FormAssetPlayer extends javax.swing.JDialog {
         editButton = new javax.swing.JButton();
         deleteButton = new javax.swing.JButton();
         saveButton = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        cancelButton = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -221,8 +221,13 @@ public class FormAssetPlayer extends javax.swing.JDialog {
         });
         jPanel3.add(saveButton);
 
-        jButton4.setText("Cancelar");
-        jPanel3.add(jButton4);
+        cancelButton.setText("Cancelar");
+        cancelButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancelButtonActionPerformed(evt);
+            }
+        });
+        jPanel3.add(cancelButton);
 
         jPanel2.add(jPanel3, java.awt.BorderLayout.NORTH);
 
@@ -240,14 +245,25 @@ public class FormAssetPlayer extends javax.swing.JDialog {
 
         jLabel6.setText("Término:");
 
+        endTextField.setEnabled(false);
+
+        startTextField.setEnabled(false);
+
         salaryTextField.setText("0");
+        salaryTextField.setEnabled(false);
+
+        franchiseComboBox.setEnabled(false);
+        franchiseComboBox.setName(""); // NOI18N
 
         org.jdesktop.swingbinding.JComboBoxBinding jComboBoxBinding = org.jdesktop.swingbinding.SwingBindings.createJComboBoxBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, franchiseList, franchiseComboBox);
         bindingGroup.addBinding(jComboBoxBinding);
 
+        playerComboBox.setEnabled(false);
+
         jComboBoxBinding = org.jdesktop.swingbinding.SwingBindings.createJComboBoxBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, playerList, playerComboBox);
         bindingGroup.addBinding(jComboBoxBinding);
 
+        idContractLabel.setForeground(new java.awt.Color(102, 102, 102));
         idContractLabel.setText("###");
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
@@ -263,7 +279,7 @@ public class FormAssetPlayer extends javax.swing.JDialog {
                     .addComponent(jLabel4)
                     .addComponent(jLabel5)
                     .addComponent(jLabel6))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 75, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 76, Short.MAX_VALUE)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(idContractLabel)
                     .addComponent(playerComboBox, 0, 246, Short.MAX_VALUE)
@@ -353,10 +369,20 @@ public class FormAssetPlayer extends javax.swing.JDialog {
 
     private void newButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newButtonActionPerformed
         franchiseComboBox.setSelectedIndex(0);
+        idContractLabel.setText("0");
         playerComboBox.setSelectedIndex(0);
         salaryTextField.setText("0");
         startTextField.setText("");
         endTextField.setText("");
+        
+        franchiseComboBox.setEnabled(true);
+        playerComboBox.setEnabled(true);
+        salaryTextField.setEnabled(true);
+        startTextField.setEnabled(true);
+        endTextField.setEnabled(true);
+        
+        salaryTextField.requestFocus();
+        
     }//GEN-LAST:event_newButtonActionPerformed
 
     private void firstButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_firstButtonActionPerformed
@@ -401,7 +427,7 @@ public class FormAssetPlayer extends javax.swing.JDialog {
 
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
         AssetPlayer ap = new AssetPlayer();
-        
+        ap.setIdContract(Integer.parseInt(idContractLabel.getText()));
         ap.setFranchise(getSelectedFranchise());
         ap.setPlayer(getSelectedPlayer());
         ap.setStartC(convertToDate(startTextField.getText()));
@@ -409,11 +435,12 @@ public class FormAssetPlayer extends javax.swing.JDialog {
         ap.setSalary(Double.parseDouble(salaryTextField.getText()));
         
         DAOAssetPlayer dao = new DAOAssetPlayer();
-        dao.insert(ap);
+        dao.save(ap);
         
         updateList();
         updateUI();
         
+        cancelButtonActionPerformed(null);
     }//GEN-LAST:event_saveButtonActionPerformed
 
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
@@ -427,14 +454,25 @@ public class FormAssetPlayer extends javax.swing.JDialog {
     }//GEN-LAST:event_deleteButtonActionPerformed
 
     private void editButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editButtonActionPerformed
-        int index = assetPlayerTable.getSelectedRow();
-        AssetPlayer ap = (AssetPlayer)assetPlayerList.get(index);
+
+        updateUI();
         
-        DAOAssetPlayer dao = new DAOAssetPlayer();
-        dao.delete(ap);
+        salaryTextField.setEnabled(true);
+        startTextField.setEnabled(true);
+        endTextField.setEnabled(true);
+        
+    }//GEN-LAST:event_editButtonActionPerformed
+
+    private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
+        franchiseComboBox.setEnabled(false);
+        playerComboBox.setEnabled(false);
+        salaryTextField.setEnabled(false);
+        startTextField.setEnabled(false);
+        endTextField.setEnabled(false);
+        
         updateList();
         updateUI();
-    }//GEN-LAST:event_editButtonActionPerformed
+    }//GEN-LAST:event_cancelButtonActionPerformed
     
     
     private Player getSelectedPlayer(){
@@ -502,6 +540,7 @@ public class FormAssetPlayer extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private java.util.List<AssetPlayer> assetPlayerList;
     private javax.swing.JTable assetPlayerTable;
+    private javax.swing.JButton cancelButton;
     private javax.swing.JButton deleteButton;
     private javax.swing.JButton editButton;
     private javax.swing.JTextField endTextField;
@@ -509,7 +548,6 @@ public class FormAssetPlayer extends javax.swing.JDialog {
     private javax.swing.JComboBox franchiseComboBox;
     private java.util.List<Franchise> franchiseList;
     private javax.swing.JLabel idContractLabel;
-    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

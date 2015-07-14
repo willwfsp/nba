@@ -16,6 +16,7 @@ import javax.swing.JOptionPane;
 import model.OracleJDBC;
 import model.domain.Player;
 import model.domain.Arena;
+import model.domain.Franchise;
 
 /**
  *
@@ -77,5 +78,45 @@ public class DAOPlayer {
         
         return null;
         
+    }
+    
+    public List<Player> getPlayersByFranchise(Franchise franchise){
+        
+        String sql = "select e.idperson, college, hschool, position, name, surname, b_date, country  from Player p, Person e, AssetPlayer a " +
+                          "where p.idPerson = e.idPerson AND " +
+                          "p.idPerson = a.idPlayer AND " +
+                          "a.idFranchise = " + franchise.getIdFranchise() + " order by name";
+        List<Player> playerList = new ArrayList<>();
+        try {  
+                PreparedStatement pst = OracleJDBC.getPreparedStatement(sql);
+                ResultSet rs = pst.executeQuery();
+                while(rs.next()){
+                    Player player  = new Player();
+
+                    player.setIdPerson(rs.getInt("idPerson"));
+                    player.sethSchool(rs.getString("hSchool"));
+                    player.setPosition(rs.getString("position"));
+                    player.setCollege(rs.getString("college"));
+                    player.setName(rs.getString("name"));
+                    player.setSurname(rs.getString("surname"));
+                    player.setCountry(rs.getString("country"));
+                    
+                    Calendar c = Calendar.getInstance();
+                    java.sql.Time t = rs.getTime("b_Date");
+                    c.setTime(t);
+                    
+                    player.setbDate(c);
+                    
+                    playerList.add(player);
+                }
+
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "Erro ao listar Players.\nDetalhes: "+ ex.getMessage());
+            }
+        
+        
+        
+        
+        return playerList;
     }
 }

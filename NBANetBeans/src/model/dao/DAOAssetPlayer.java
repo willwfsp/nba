@@ -70,13 +70,24 @@ public class DAOAssetPlayer {
      * @param assetPlayer novo assetPlayer
      * @return Boolean sucesso ou falha
      */
-    public Boolean insert(AssetPlayer assetPlayer){
+    public Boolean save(AssetPlayer assetPlayer){
         if(list.isEmpty()){
             getList();
         }
-        assetPlayer.setIdContract(list.size()+100);
-        list.add(assetPlayer);
         
+        if(assetPlayer.getIdContract() <= 0){
+            assetPlayer.setIdContract(list.get(list.size()-1).getIdContract() +100);
+            insert(assetPlayer);
+        }else{
+            update(assetPlayer);
+        }
+        
+        
+        
+        return true;
+    }
+    
+    public Boolean insert(AssetPlayer assetPlayer){
         String sql = "INSERT INTO AssetPlayer (idContract, idPlayer, idFranchise, startC, endC, salary) VALUES(?,?,?,?,?,?)";
         try{
             PreparedStatement pst = OracleJDBC.getPreparedStatement(sql);
@@ -86,13 +97,14 @@ public class DAOAssetPlayer {
             pst.setDate(4, (Date) assetPlayer.getStartC());
             pst.setDate(5, (Date) assetPlayer.getEndC());
             pst.setDouble(6, assetPlayer.getSalary());
-            
             pst.executeUpdate();
+            getList();
+            JOptionPane.showMessageDialog(null, "Contrato inserido com sucesso.");
+            return true;
         }catch (SQLException ex){
             JOptionPane.showMessageDialog(null, "Erro ao inserir AssetPlayer.\nDetalhes: "+ex.getMessage());
+            return false;
         }
-
-        return true;
     }
     
     public Boolean remove (AssetPlayer assetPlayer){
@@ -102,6 +114,7 @@ public class DAOAssetPlayer {
             PreparedStatement pst = OracleJDBC.getPreparedStatement(sql);
             pst.executeUpdate(sql);
             getList();
+            JOptionPane.showMessageDialog(null, "Contrato removido com sucesso.");
             return true;
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao remover AssetPlayer.\nDetalhes: "+ex.getMessage());
@@ -109,14 +122,19 @@ public class DAOAssetPlayer {
         }
     }
     
-    public Boolean delete (AssetPlayer assetPlayer){
-        PreparedStatement ps;
+    public Boolean update (AssetPlayer assetPlayer){
+        String sql = "UPDATE AssetPlayer SET salary = ?, startc = ?, endC = ? WHERE idContract = "+ assetPlayer.getIdContract() + 
+                " AND idPlayer = " + assetPlayer.getPlayer().getIdPerson() + 
+                " AND idFranchise = " + assetPlayer.getFranchise().getIdFranchise();
+
         try {
-            ps = OracleJDBC.getConnection().prepareStatement(
-                    "UPDATE Messages SET salary = ?, startc = ?, endC = ? WHERE idContract = "+ assetPlayer.getIdContract() + " AND idPlayer = " + assetPlayer.getPlayer().getIdPerson() + " AND idFranchise = " + assetPlayer.getFranchise().getIdFranchise());
+            PreparedStatement ps = OracleJDBC.getConnection().prepareStatement(sql);
+                    
             ps.setDouble(1,assetPlayer.getSalary());
             ps.setDate(2, (Date) assetPlayer.getStartC());
             ps.setDate(3, (Date) assetPlayer.getEndC());
+            ps.executeUpdate();
+            JOptionPane.showMessageDialog(null, "Contrato atualizado com sucesso.");
             return true;
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao atualizar AssetPlayer.\nDetalhes: "+ex.getMessage());
